@@ -21,7 +21,7 @@ int main()
     RenderWindow window("WINDOW", 680, 680);
     SDL_Texture* lulu = window.loadTexture("./tex/splash.png");
 
-    Entity platform0(250, 250, lulu);
+    Entity platform0(500, 500, lulu);
     
     bool running = true;
     SDL_Event e;

@@ -39,8 +39,8 @@ void RenderWindow::render(Entity& entity)
 
     // The destination of the texture
     SDL_Rect dst;
-    dst.x = entity.getX();
-    dst.y = entity.getY();
+    dst.x = entity.getX() / 2;
+    dst.y = entity.getY() / 2;
     dst.w = entity.getCurrentFrame().w / 2; // Scale size
     dst.h = entity.getCurrentFrame().h / 2; // Scale size
     
