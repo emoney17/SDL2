@@ -1,42 +1,60 @@
+#include <iostream>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#include <iostream>
+const char* title = "window";
+const int width = 680;
+const int height = 400;
 
-#include "./render_window.h"
-#include "./entity.h"
+void createWindowAndRenderer(SDL_Renderer** renderer, SDL_Window** window);
+void clean(SDL_Renderer* renderer, SDL_Window* window);
 
 int main()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) > 0) {
-	std::cout << "INIT::ERROR: " << SDL_GetError() << std::endl;
-	return -1;
-    }
+    SDL_Window* window = nullptr;
+    SDL_Renderer* renderer = nullptr;
 
-    if (!(IMG_Init(IMG_INIT_PNG))) {
-	std::cout << "IMAGE::ERROR: " << SDL_GetError() << std::endl;
-	return -1;
-    }
+    if (SDL_Init(SDL_INIT_VIDEO) > 0)
+        std::cout << "SDL init error: " << SDL_GetError() << std::endl;
 
-    RenderWindow window("WINDOW", 680, 680);
-    SDL_Texture* lulu = window.loadTexture("./tex/splash.png");
+    if (!IMG_Init(IMG_INIT_PNG))
+        std::cout << "IMG init error: " << SDL_GetError() << std::endl;
 
-    Entity platform0(500, 500, lulu);
-    
-    bool running = true;
+    createWindowAndRenderer(&renderer, &window);
+
     SDL_Event e;
+    bool running = true;
     while (running) {
-	while (SDL_PollEvent(&e)) {
-	    if (e.type == SDL_QUIT)
-		running = false;
-	}
-	window.clear();
-	window.render(platform0);
-	window.display();
+        while (SDL_PollEvent(&e)) {
+            switch (e.type) {
+                case SDL_QUIT:
+                    running = false;
+            }
+        }
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 225);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);
     }
-    
-    window.clean();
-    SDL_Quit();
-
+    clean(renderer, window);
     return 0;
+}
+
+void createWindowAndRenderer(SDL_Renderer** renderer, SDL_Window** window)
+{
+    *window = SDL_CreateWindow(title, 0, 0, width, height, 0);
+    if (*window == NULL)
+        std::cout << "Window error: " << SDL_GetError() << std::endl;
+    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED);
+    if (*renderer == NULL)
+        std::cout << "Renderer error: " << SDL_GetError() << std::endl;
+
+}
+
+void clean(SDL_Renderer* renderer, SDL_Window* window)
+{
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    IMG_Quit();
+    SDL_Quit();
 }
