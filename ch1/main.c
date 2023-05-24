@@ -40,8 +40,9 @@ int main(void) {
 
 			while (quit == false) {
 				while (SDL_PollEvent(&e)) {
-					if (e.type == SDL_QUIT)
+					if (e.type == SDL_QUIT) {
 						quit = true;
+					}
 				}
 			}
 		}
