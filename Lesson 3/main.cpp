@@ -1,4 +1,3 @@
-#include <SDL2/SDL_events.h>
 #include <cstddef>
 #include <cstdio>
 #include <iostream>
